@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
-  <xacro:macro name="lidar_sensor" params="name parent *origin ros_topic update_rate min_range max_range field_of_view_horizontal field_of_view_vertical ray_count_horizontal ray_count_vertical sensor_mesh">
+  <xacro:macro name="lidar_sensor" params="name parent *origin update_rate min_range max_range field_of_view_horizontal field_of_view_vertical ray_count_horizontal ray_count_vertical sensor_mesh_base_1 sensor_mesh_base_2 sensor_mesh_scan">
     <joint name="${name}_joint" type="fixed">
       <xacro:insert_block name="origin" />
       <parent link="${parent}"/>
@@ -15,13 +15,33 @@
         <inertia ixx="0.000000017" ixy="0" ixz="0" iyy="0.000000017" iyz="0" izz="0.000000017" />
       </inertial>
       <visual>
-        <origin xyz="0 0 0" rpy="0 0 0" />
+        <origin xyz="0 0 -0.03" rpy="0 0 0" />
         <geometry>
           <!--<box size="0.01 0.01 0.01" /> -->
           <!-- <mesh filename="package://rotors_description/meshes/sonar_sensor/max_sonar_ez4.dae"/> -->
-           <!--<mesh filename="package://ardupilot_sitl_gazebo_plugin/meshes/${sensor_mesh}"/>-->
-           
-         <!-- <mesh filename="package://ardupilot_sitl_gazebo_plugin/meshes/lidar_lite_v2/meshes/lidar_lite_v2.dae"/> -->
+          <!--<mesh filename="package://ardupilot_sitl_gazebo_plugin/meshes/${sensor_mesh}"/>-->
+           <mesh filename="file://${sensor_mesh_base_1}"/>
+         <!-- <mesh filename="package://ardupilot_sitl_gazebo_plugin/meshes/meshes_sensor/lidar_lite_v2/meshes/lidar_lite_v2.dae"/> -->
+        </geometry>
+      </visual>
+      <visual>
+        <origin xyz="0 0 -0.03" rpy="0 0 0" />
+        <geometry>
+          <!--<box size="0.01 0.01 0.01" /> -->
+          <!-- <mesh filename="package://rotors_description/meshes/sonar_sensor/max_sonar_ez4.dae"/> -->
+          <!--<mesh filename="package://ardupilot_sitl_gazebo_plugin/meshes/${sensor_mesh}"/>-->
+           <mesh filename="file://${sensor_mesh_base_2}"/>
+         <!-- <mesh filename="package://ardupilot_sitl_gazebo_plugin/meshes/meshes_sensor/lidar_lite_v2/meshes/lidar_lite_v2.dae"/> -->
+        </geometry>
+      </visual>
+      <visual>
+        <origin xyz="0 0 -0.03" rpy="0 0 0" />
+        <geometry>
+          <!--<box size="0.01 0.01 0.01" /> -->
+          <!-- <mesh filename="package://rotors_description/meshes/sonar_sensor/max_sonar_ez4.dae"/> -->
+          <!--<mesh filename="package://ardupilot_sitl_gazebo_plugin/meshes/${sensor_mesh}"/>-->
+           <mesh filename="file://${sensor_mesh_scan}"/>
+         <!-- <mesh filename="package://ardupilot_sitl_gazebo_plugin/meshes/meshes_sensor/lidar_lite_v2/meshes/lidar_lite_v2.dae"/> -->
         </geometry>
       </visual>
    <!--   <collision>
@@ -60,11 +80,12 @@
           </range>
         </ray>
 
-        <plugin name="gazebo_ros_${name}_controller" filename="librotors_gazebo_sonar_plugin.so">
-          <gaussianNoise>0.005</gaussianNoise>
-          <topicName>${ros_topic}</topicName>
-          <frameId>${name}_link</frameId>
-        </plugin>
+	<plugin name="gazebo_ros_${name}_controller" filename="libgazebo_ros_laser.so"> 
+	<!--  <plugin name="gazebo_ros_${name}_controller" filename="libgazebo_ros_gpu_laser.so"> -->
+          <topicName>/scan</topicName>
+          <!-- <frameName>scan_link</frameName> -->
+	  <frameName>lidar_link</frameName> 
+	</plugin>
       </sensor>
     </gazebo>
   </xacro:macro>

@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(ardupilot_sitl_gazebo_plugin)
 
+SET(CMAKE_CXX_FLAGS "-std=c++11")
+
 # Load catkin and all dependencies required for this package
 find_package(catkin REQUIRED COMPONENTS 
   roscpp 
@@ -81,6 +83,15 @@ add_library(${PROJECT_NAME}
 )
 
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
-#add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_generate_messages_cpp ${PROJECT_NAME}_gencfg)
+add_dependencies(${PROJECT_NAME} ${PROJECT_NAME}_generate_messages_cpp ${PROJECT_NAME}_generate_services_cpp ${PROJECT_NAME}_gencfg)
 
+add_library(${PROJECT_NAME}_rover
+  src/rover/ardupilot_sitl_gazebo_plugin.cpp
+  src/rover/apm_plugin_apm_side.cpp
+  src/rover/apm_plugin_gazebo_side.cpp
+  src/rover/apm_plugin_ros_side.cpp
+  src/SocketAPM.cpp
+)
 
+target_link_libraries(${PROJECT_NAME}_rover ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
+add_dependencies(${PROJECT_NAME}_rover ${PROJECT_NAME}_rover_generate_messages_cpp ${PROJECT_NAME}_rover_generate_services_cpp ${PROJECT_NAME}_rover_gencfg)

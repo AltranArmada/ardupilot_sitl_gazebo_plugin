@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+<!-- Sendding simple goals -->
+  	<node pkg="simple_navigation_goals" type="simple_navigation_goals" 		respawn="false" name="simple_navigation_goals" output="screen">  
+		<param name="number_points" value="2"/>
+     		<param name="point_x1" value="-6.0"/>
+     		<param name="point_y1" value="-2.0"/>
+		<param name="point_x2" value="0.0"/>
+     		<param name="point_y2" value="0.0"/>
+ 	 </node>
+	
+</launch>
